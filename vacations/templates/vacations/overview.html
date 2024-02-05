@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>My vacations</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>Vacation</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Employee</th>
+    </tr>
+    {% for vacation in vacations %}
+    <tr>
+        <td>{{ vacation.id }}</td>
+        <td>{{ vacation.start_date }}</td>
+        <td>{{ vacation.end_date }}</td>
+        <td>{{ vacation.user }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'add-vacation' %}" class="btn btn-primary">Add Vacation</a>
+
+<form action="{% url 'add-vacation' %}">
+    <button type="submit">Add Vacation</button>
+</form>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form></body>
+</html>
