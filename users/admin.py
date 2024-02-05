@@ -23,5 +23,5 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-# Now register the new UserAdmin with your User model
+
 admin.site.register(User, UserAdmin)
