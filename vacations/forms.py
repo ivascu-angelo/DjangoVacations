@@ -5,7 +5,7 @@ from .models import Vacation
 class VacationForm(forms.ModelForm):
     class Meta:
         model = Vacation
-        fields = '__all__'  # Assuming 'user' is included in your model fields
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
