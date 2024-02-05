@@ -11,6 +11,5 @@ class VacationForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super(VacationForm, self).__init__(*args, **kwargs)
         if not (self.user and self.user.is_staff):
-            # Assuming 'user' is the name of the field in your model you want to hide
             if 'user' in self.fields:
                 self.fields.pop('user')

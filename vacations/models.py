@@ -11,4 +11,4 @@ class Vacation(models.Model):
     )
     start_date = models.DateField()
     end_date = models.DateField()
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)

@@ -37,5 +37,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_admin(self):
-        # This is a handy way to get whether the user is a superuser
         return self.is_superuser
