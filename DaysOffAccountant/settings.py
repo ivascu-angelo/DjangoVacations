@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.contrib import admin
+
+from DaysOffAccountant import users, vacations
+
 # from django.contrib.auth.admin import UserAdmin
 #
 # from users.models import User
@@ -35,8 +38,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'vacations',
+    'DaysOffAccountant.users',
+    'DaysOffAccountant.vacations',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,7 +93,7 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     # Your custom backend
-    'users.backends.EmailBackend',
+    'DaysOffAccountant.users.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
