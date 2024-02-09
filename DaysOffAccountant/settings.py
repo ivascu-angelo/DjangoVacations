@@ -38,6 +38,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django_flatpickr",
     'DaysOffAccountant.users',
     'DaysOffAccountant.vacations',
     'django.contrib.admin',
@@ -138,3 +139,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DJANGO_FLATPICKR = {
+    # More themes: https://flatpickr.js.org/themes/
+    "theme_name": "dark",
+}
