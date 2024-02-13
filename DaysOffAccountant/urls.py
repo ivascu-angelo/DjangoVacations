@@ -1,5 +1,8 @@
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
+from DaysOffAccountant import settings
 from DaysOffAccountant.users import views as users_views
 from django.contrib.auth import views as auth_views
 
@@ -10,3 +13,6 @@ urlpatterns = [
     path('vacations/', include('DaysOffAccountant.vacations.urls')),
     path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
