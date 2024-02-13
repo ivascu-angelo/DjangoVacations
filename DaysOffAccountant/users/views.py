@@ -26,23 +26,23 @@ class CustomLoginView(UserPassesTestMixin, LoginView):
     success_url = reverse_lazy('vacations')
 
     def test_func(self):
-        # Prevents authenticated users from accessing the login page
+        # daca esti auth nu ai voie
         return not self.request.user.is_authenticated
 
     def handle_no_permission(self):
-        # Redirects authenticated users trying to access the login page to 'vacations'
+        # daca esti auth, atunci mergi pe vacations
         return redirect(self.get_success_url())
 
     def form_valid(self, form):
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
-        # Authenticate the user
         user = authenticate(self.request, email=email, password=password)
         if user is not None:
             auth_login(self.request, user, backend='DaysOffAccountant.users.backends.EmailBackend')
             return redirect(self.get_success_url())
         else:
             return self.form_invalid(form)
+
 
 class UserLogoutView(View):
     def post(self, request, *args, **kwargs):
