@@ -34,16 +34,3 @@ class CustomAuthenticationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(CustomAuthenticationForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
-
-        if email and password:
-            user = authenticate(self.request, username=email, password=password)
-            if user is None:
-                raise forms.ValidationError("Invalid email or password")
-            else:
-                self.cleaned_data['user'] = user
-
-        return self.cleaned_data

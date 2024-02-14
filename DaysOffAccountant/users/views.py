@@ -1,6 +1,5 @@
 from django.contrib.auth import login as auth_login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -20,14 +19,10 @@ class SignupView(FormView):
         return super().form_valid(form)
 
 
-class CustomLoginView(UserPassesTestMixin, LoginView):
+class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'users/login.html'
     success_url = reverse_lazy('vacations')
-
-    def test_func(self):
-        # daca esti auth nu ai voie
-        return not self.request.user.is_authenticated
 
     def handle_no_permission(self):
         # daca esti auth, atunci mergi pe vacations

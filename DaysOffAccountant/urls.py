@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', users_views.SignupView.as_view(), name='signup'),
-    path('login/', users_views.CustomLoginView.as_view(), name='login'),
+    path('login/', users_views.CustomLoginView.as_view(redirect_authenticated_user=True), name='login'),
     path('vacations/', include('DaysOffAccountant.vacations.urls')),
     path('admin/', admin.site.urls),
 ]
