@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Vacations</title>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <script src="{% static 'vacations/myfirst.js' %}"></script>
 </head>
 <body>
@@ -24,13 +25,34 @@
         </tr>
         {% endfor %}
     </table>
-    <a href="{% url 'add-vacation' %}" class="btn btn-primary">Add Vacation</a>
-    <form action="{% url 'add-vacation' %}">
-        <button type="submit">Add Vacation</button>
-    </form>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
 </body>
+<form method="post" action="{% url 'add-vacation' %}">
+    {% csrf_token %}
+    <button type="submit">Create Vacation</button>
+</form>
+<form method="post" action="{% url 'create_team' %}">
+    {% csrf_token %}
+    <button type="submit">Create Team</button>
+</form>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+  <h3>Select one of your teams</h3>
+    <form method="get" action="{% url 'vacations' %}">
+        {% csrf_token %}
+        <select name="team">
+            {% for team in teams %}
+            <option value="{{ team.id }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter by team</button>
+    </form>
+<h3>Go to team list</h3>
+<a href="{% url 'teams' %}">
+    <button type="button">
+        My teams
+    </button>
+</a>
 </html>
+

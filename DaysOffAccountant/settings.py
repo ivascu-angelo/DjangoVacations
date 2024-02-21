@@ -38,8 +38,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     'DaysOffAccountant.users',
     'DaysOffAccountant.vacations',
+    'DaysOffAccountant.teams',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -93,7 +95,6 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     # Your custom backend
-    'DaysOffAccountant.users.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

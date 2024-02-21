@@ -1,0 +1,29 @@
+<table>
+    <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>Number of Users</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for team in teams %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ team.users_count }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Want to create a team?</h3>
+<form method="post" action="{% url 'create_team' %}">
+    {% csrf_token %}
+    <button type="submit">Create Team</button>
+</form>
+
+<h3>Navigate to vacations</h3>
+<a href="{% url 'vacations' %}">
+    <button type="button">
+        Go to Vacations
+    </button>
+</a>
