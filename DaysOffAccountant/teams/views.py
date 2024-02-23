@@ -26,9 +26,3 @@ class TeamListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user_teams = self.request.user.teams.all()
         return user_teams
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_teams = self.request.user.teams.all()
-        context['teams'] = user_teams
-        return context
