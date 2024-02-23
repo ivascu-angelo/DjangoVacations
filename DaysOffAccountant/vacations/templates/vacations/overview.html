@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Vacations</title>
     {% load static %}
+    <script src="{% static 'vacations/js/team_redirect.js' %}"></script>
 </head>
 <body>
     <table border="1">
@@ -53,13 +54,5 @@
             My teams
         </button>
     </a>
-    <script>
-        function redirectToTeam(event) {
-            event.preventDefault();
-            const teamName = document.getElementById('team-select').value;
-            window.location.href = '/teams/' + encodeURIComponent(teamName);
-            return false;
-        }
-    </script>
 </body>
 </html>
