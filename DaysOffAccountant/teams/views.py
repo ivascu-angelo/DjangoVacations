@@ -56,6 +56,11 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
         team = form.cleaned_data['team']
         # de la cine trimit
         from_email = self.request.user.email
+
+        if User.objects.filter(email=user_email, teams=team).exists():
+            form.add_error('user_email', 'This user is already a member of the team.')
+            return self.form_invalid(form)
+
         token = self.generate_unique_token()
         invitation = InviteToTeam(email=user_email, token=token, team=team, was_accepted=False)
         invitation.save()
@@ -70,8 +75,6 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
         )
 
         return super().form_valid(form)
-
-
 
 
 class AcceptInvitationView(View):
