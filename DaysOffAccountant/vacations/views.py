@@ -2,9 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
-
-from DaysOffAccountant.teams.models import Team
-from DaysOffAccountant.users.models import User
 from DaysOffAccountant.vacations.models import Vacation
 
 
