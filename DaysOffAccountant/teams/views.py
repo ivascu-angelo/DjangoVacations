@@ -1,3 +1,5 @@
+import secrets
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
@@ -42,13 +44,19 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
         kwargs['teams'] = self.request.user.teams.all()
         return kwargs
 
+    def generate_unique_token(self):
+        while True:
+            token = secrets.token_urlsafe(20)
+            if not InviteToTeam.objects.filter(token=token).exists():
+                return token
+
     def form_valid(self, form):
         # cui trimit
         user_email = form.cleaned_data['user_email']
         team = form.cleaned_data['team']
         # de la cine trimit
         from_email = self.request.user.email
-        token = get_random_string(20)
+        token = self.generate_unique_token()
         invitation = InviteToTeam(email=user_email, token=token, team=team, was_accepted=False)
         invitation.save()
         accept_url = self.request.build_absolute_uri(reverse('accepted-invitation', args=[token]))
@@ -62,6 +70,8 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
         )
 
         return super().form_valid(form)
+
+
 
 
 class AcceptInvitationView(View):
