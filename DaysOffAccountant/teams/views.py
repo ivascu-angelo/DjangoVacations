@@ -2,9 +2,8 @@ import secrets
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy, reverse
-from django.utils.crypto import get_random_string
 from django.views import View
 from django.views.generic import CreateView, ListView, FormView
 from DaysOffAccountant.teams.forms import InvitationForm
@@ -80,8 +79,10 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
 class AcceptInvitationView(View):
     def get(self, request, *args, **kwargs):
         token = kwargs.get('token')
+        # ia din DB instanta in baza tokenului
         invitation = get_object_or_404(InviteToTeam, token=token)
-
+        if not User.objects.filter(email=invitation.email).exists():
+            return redirect(f'/signup?invitation_token={token}')
         if invitation.was_accepted:
             message = 'This invitation has already been accepted.'
             context = {'team_name': None, 'message': message}
