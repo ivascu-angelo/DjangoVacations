@@ -3,13 +3,18 @@
     <title>Sign Up</title>
 </head>
 <body>
- <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="id_email">Email:</label>
+            <input type="email" name="email" id="id_email" value="{{ form.email.value|default_if_none:'' }}" required>
+        </p>
+        <p>
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" id="id_password" required>
+        </p>
+        <button type="submit">Sign up</button>
+    </form>
     <a href="{% url 'login' %}">Already have an account?</a>
-
 </body>
 </html>
-

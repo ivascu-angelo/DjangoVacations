@@ -16,5 +16,6 @@ class InvitationForm(forms.Form):
         self.fields['team'].queryset = teams
 
 
+
     def clean_user_email(self):
         return self.cleaned_data.get('user_email')

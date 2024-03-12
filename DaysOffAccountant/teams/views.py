@@ -37,9 +37,10 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
     template_name = 'teams/invite_to_team.html'
     form_class = InvitationForm
     success_url = reverse_lazy('invite')
+    support_email = "support@vacation-manager.com"
 
     def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
+        kwargs = super(InviteUserToTeamView, self).get_form_kwargs()
         kwargs['teams'] = self.request.user.teams.all()
         return kwargs
 
@@ -53,22 +54,20 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
         # cui trimit
         user_email = form.cleaned_data['user_email']
         team = form.cleaned_data['team']
-        # de la cine trimit
-        from_email = self.request.user.email
-
+        support_email = 'support@vacation-manger.com'
         if User.objects.filter(email=user_email, teams=team).exists():
             form.add_error('user_email', 'This user is already a member of the team.')
             return self.form_invalid(form)
 
         token = self.generate_unique_token()
-        invitation = InviteToTeam(email=user_email, token=token, team=team, was_accepted=False)
-        invitation.save()
+        InviteToTeam.objects.create(email=user_email, token=token, team=team, was_accepted=False)
+
         accept_url = self.request.build_absolute_uri(reverse('accepted-invitation', args=[token]))
         email_body = f"Invitation to team:{team.name} LINK for acceptance:\n\n{accept_url}"
         send_mail(
             'Invitation to join a team',
             email_body,
-            from_email,
+            support_email,
             [user_email],
             fail_silently=False,
         )
@@ -77,22 +76,21 @@ class InviteUserToTeamView(LoginRequiredMixin, FormView):
 
 
 class AcceptInvitationView(View):
+
     def get(self, request, *args, **kwargs):
         token = kwargs.get('token')
         # ia din DB instanta in baza tokenului
-        invitation = get_object_or_404(InviteToTeam, token=token)
-        if not User.objects.filter(email=invitation.email).exists():
+        invitation = get_object_or_404(InviteToTeam, token=token, was_accepted=False)
+        user = User.objects.filter(email=invitation.email).first()
+
+        if not user:
             return redirect(f'/signup?invitation_token={token}')
-        if invitation.was_accepted:
-            message = 'This invitation has already been accepted.'
-            context = {'team_name': None, 'message': message}
         else:
-            user = User.objects.get(email=invitation.email)
             user.teams.add(invitation.team)
             invitation.was_accepted = True
-            invitation.save()
-            user.save()
             message = 'You have successfully joined the team!'
             context = {'team_name': invitation.team.name, 'message': message}
 
         return render(request, 'teams/accepted_invitation.html', context)
+
+
