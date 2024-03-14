@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from DaysOffAccountant.vacations.models import Vacation
 
 
@@ -11,10 +12,23 @@ class VacationView(LoginRequiredMixin, ListView):
     success_url = reverse_lazy('vacations')
 
     def get_queryset(self):
-        return Vacation.objects.filter(user_id=self.request.user.id)
+        print('page load')
+        return Vacation.objects.all()
 
     def get_context_data(self, **kwargs):
-        return {"teams": self.request.user.teams.all(), **super().get_context_data(**kwargs)}
+        return {"team_admin": self.request.user.is_team_admin, 'teams': self.request.user.teams.all(),
+                **super().get_context_data(**kwargs)}
+
+    def post(self, request, *args, **kwargs):
+        is_team_admin = self.request.user.is_team_admin
+
+        if is_team_admin:
+            vacation_id = request.POST.get('vacation_id')
+            vacation = get_object_or_404(Vacation, id=vacation_id)
+            print(vacation.start_date, 'vacaiton')
+            vacation.is_approved = True
+            vacation.save()
+            return HttpResponseRedirect(request.path)
 
 
 class AddVacationView(LoginRequiredMixin, CreateView):
@@ -25,7 +39,6 @@ class AddVacationView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.is_accepted = self.request.user.is_team_admin
         return super().form_valid(form)
-
-
 

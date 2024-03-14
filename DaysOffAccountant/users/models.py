@@ -9,6 +9,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     teams = models.ManyToManyField(Team, related_name='users')
     objects = UserManager()
+    is_team_admin = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -18,3 +19,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_admin(self):
         return self.is_superuser
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

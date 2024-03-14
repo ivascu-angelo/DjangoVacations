@@ -21,6 +21,18 @@
             <td>{{ vacation.start_date }}</td>
             <td>{{ vacation.end_date }}</td>
             <td>{{ vacation.user }}</td>
+            {% if team_admin and not vacation.is_approved %}
+                <form method="post">
+                  {% csrf_token %}
+                    <td>
+                        <input type="hidden" name="vacation_id" value={{vacation.id}}
+                        }>
+                <button>
+                    Approve Vacation
+                </button>
+                </td>
+                </form>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>
