@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Vacations</title>
+    {% load static %}
+    <script src="{% static 'vacations/js/team_redirect.js' %}"></script>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Vacation ID</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Employee</th>
+        </tr>
+        {% for vacation in vacations %}
+        <tr>
+            <td>{{ vacation.id }}</td>
+            <td>{{ vacation.start_date }}</td>
+            <td>{{ vacation.end_date }}</td>
+            <td>{{ vacation.user }}</td>
+            {% if team_admin and not vacation.is_approved %}
+                <form method="post">
+                  {% csrf_token %}
+                    <td>
+                        <input type="hidden" name="vacation_id" value={{vacation.id}}
+                        }>
+                <button>
+                    Approve Vacation
+                </button>
+                </td>
+                </form>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <form method="post" action="{% url 'add-vacation' %}">
+        {% csrf_token %}
+        <button type="submit">Create Vacation</button>
+    </form>
+    <form method="post" action="{% url 'create_team' %}">
+        {% csrf_token %}
+        <button type="submit">Create Team</button>
+    </form>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+    <h3>Select one of your teams</h3>
+    <form id="select-team-form" method="get" onsubmit="return redirectToTeam(event);">
+        <select name="team" id="team-select">
+            {% for team in teams %}
+            <option value="{{ team.name }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter by team</button>
+    </form>
+
+    <h3>Go to team list</h3>
+    <a href="{% url 'teams' %}">
+        <button type="button">
+            My teams
+        </button>
+    </a>
+</body>
+</html>

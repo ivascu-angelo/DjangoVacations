@@ -9,9 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
-from django.contrib import admin
+from django.contrib import admin, staticfiles
+
+from DaysOffAccountant import users, vacations
+
 # from django.contrib.auth.admin import UserAdmin
 #
 # from users.models import User
@@ -35,8 +38,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'vacations',
+    'django_extensions',
+    'DaysOffAccountant.users',
+    'DaysOffAccountant.vacations',
+    'DaysOffAccountant.teams',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,7 +95,6 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     # Your custom backend
-    'users.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -135,3 +139,38 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DJANGO_FLATPICKR = {
+    # More themes: https://flatpickr.js.org/themes/
+    "theme_name": "dark",
+}
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'vacations', 'static')]
+
+LOGIN_REDIRECT_URL = '/vacations/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+
+
+LOGGING = {
+    'version': 1,
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+}

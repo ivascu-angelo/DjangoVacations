@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Vacation</title>
+    <link rel="stylesheet" href="{% static 'vacations/flatpickr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vacations/themes/dark.css' %}">
+</head>
+<body>
+    <h1>Add Vacation</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.media }}
+        <div>
+            <label for="id_start_date">Start date:</label>
+            {{ form.start_date }}
+            {% if form.start_date.errors and form.submitted %}
+                <p style="color: red;">{{ form.start_date.errors }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_end_date">End date:</label>
+            {{ form.end_date }}
+            {% if form.end_date.errors and form.submitted %}
+                <p style="color: red;">{{ form.end_date.errors }}</p>
+            {% endif %}
+        </div>
+        <button type="submit">Save</button>
+    </form>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+    <script src="{% static 'vacations/flatpickr.min.js' %}"></script>
+    <script>
+        flatpickr("#id_start_date", {
+            enableTime: false,
+            dateFormat: "Y-m-d",
+        });
+
+        flatpickr("#id_end_date", {
+            enableTime: false,
+            dateFormat: "Y-m-d",
+        });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            this.submitted = true;
+        });
+    </script>
+</body>
+</html>
